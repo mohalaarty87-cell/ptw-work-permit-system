@@ -1,6 +1,6 @@
 # Database setup — first migration
 
-The Supabase project and initial schema are provisioned. Vercel Production has `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` configured, and a production redeployment completed with status Ready. The first confirmed Auth account has an active `Administrator` profile. The browser app still uses IndexedDB and local role selection, so operational data has not moved to Supabase and authenticated API behavior is not yet verified.
+The Supabase project and initial schema are provisioned. Vercel Production has `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` configured, and a production redeployment completed with status Ready. The first confirmed Auth account has an active `Administrator` profile. A branch now replaces local role selection with Supabase Auth, but it has not reached production or been tested with the account owner's password. Operational records still remain in IndexedDB.
 
 ## Required external setup
 
@@ -11,11 +11,11 @@ The Supabase project and initial schema are provisioned. Vercel Production has `
 5. Review the role-to-store rules and scope behavior against the organization's approved authorization matrix.
 6. Configure and verify Supabase Auth redirect URLs for the Vercel production domain and intended preview domains. The current app callback attempt returned an expired OTP link; the Auth user itself is confirmed.
 7. Verify `/api/health` reports that configuration variables are present (this alone does not prove the schema is installed) and `/api/records` rejects anonymous requests before connecting the UI.
-8. Wire the UI to authenticated database access and run a verified data migration from each legacy browser database only after reviewing backups and company/site mapping.
+8. **In progress:** Wire authentication into the UI. Next, route record reads and writes through the authenticated API, then run a verified data migration only after reviewing backups and company/site mapping.
 
 ## Why the app has not switched yet
 
-The database schema, production connection settings, and first administrator profile are ready. The API scaffold is not wired into the frontend, and production API health could not be checked in the current browser session. No legacy data has been migrated. The local app must first gain authenticated Supabase sign-in and server/API persistence, with company/site scoping, before any records are copied.
+The database schema, production connection settings, and first administrator profile are ready. The authentication UI is on a pull request. The API scaffold is not wired into the record screens, and no legacy data has been migrated. Server/API persistence and company/site scoping must be completed before records are copied.
 
 ## Migration requirements
 
