@@ -14,7 +14,7 @@ This is the execution ledger for the user's 100 ordered improvements. Items rema
 - [ ] 6. Attribute every change to a verified user identity.
 - [ ] 7. Use a relational database for linked operational records.
 - [ ] 8. Isolate data between customer organizations where applicable.
-- [ ] 9. Migrate existing browser records without losing data.
+- [ ] 9. Migrate existing browser records without losing data. **Safety groundwork completed early:** local backup v3 includes attachment contents, a SHA-256 integrity digest, and conflict-safe merge; device-to-server migration remains pending.
 - [ ] 10. Support safe offline work and conflict-aware synchronization.
 
 ## Phase 2 — Permit lifecycle
@@ -139,4 +139,5 @@ This is the execution ledger for the user's 100 ordered improvements. Items rema
 - The current application is a browser-local prototype. A Vercel project is connected to GitHub, but the project has no database connector attached.
 - Do not mark database migration, authentication, or operational readiness complete until infrastructure is provisioned, data is migrated, access controls are enforced, and the end-to-end flow is verified.
 - No user records or sample operational permits should be fabricated.
+- Backup/migration safety work was advanced early because it protects the data needed by item 1; it does not count as a completed central migration.
 

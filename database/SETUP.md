@@ -19,7 +19,7 @@ Vercel currently reports no connected database integrations for this project. No
 
 ## Migration requirements
 
-- Export and checksum a backup from every browser/device containing records.
+- Export a v3 backup from every browser/device containing records; it includes local attachments and a SHA-256 integrity digest. Legacy v2 backups do not include attachment contents.
 - Map existing store IDs without regenerating them; retain original values and timestamps.
 - Assign each old record to an approved company/site before enabling scoped access.
 - Compare source/export and target row counts and hashes, then have the owner reconcile exceptions.
