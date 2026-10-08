@@ -1,21 +1,21 @@
 # Database setup — first migration
 
-The application has no database attached yet. The SQL migration at `migrations/001_initial_schema.sql` targets Supabase Postgres because Supabase supplies the Auth identity used by the row-level security policies. A guarded API scaffold is present at `../api/records.js`; it returns a not-configured response until `SUPABASE_URL` and `SUPABASE_ANON_KEY` (or `SUPABASE_PUBLISHABLE_KEY`) are set in Vercel.
+The Supabase project and initial schema are provisioned. Vercel Production has `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` configured, and a production redeployment completed with status Ready. The first confirmed Auth account has an active `Administrator` profile. A branch now replaces local role selection with Supabase Auth, but it has not reached production or been tested with the account owner's password. Operational records still remain in IndexedDB.
 
 ## Required external setup
 
-1. Provision a Supabase project for the PTW system and connect its production environment to the Vercel project `ptw-work-permit-system`.
+1. **Completed:** Supabase project provisioned and public connection settings added to the Vercel Production environment for `ptw-work-permit-system`.
 2. Set the site region, organization/site boundaries, backup region and retention policy with the system owner before entering real data.
-3. Apply `migrations/001_initial_schema.sql` in a reviewable database migration process. Do not paste a `service_role` secret into client-side code.
-4. Create the first administrator profile through a trusted administrative process; the browser must never be allowed to assign its own role.
+3. **Completed:** Applied `migrations/001_initial_schema.sql` in the Supabase SQL Editor. Do not paste a `service_role` secret into client-side code.
+4. **Completed:** Created the first administrator profile through the trusted Supabase SQL Editor; the browser must never be allowed to assign its own role.
 5. Review the role-to-store rules and scope behavior against the organization's approved authorization matrix.
-6. Configure Supabase Auth redirect URLs to the Vercel production domain and the intended preview domains.
+6. Configure and verify Supabase Auth redirect URLs for the Vercel production domain and intended preview domains. The current app callback attempt returned an expired OTP link; the Auth user itself is confirmed.
 7. Verify `/api/health` reports that configuration variables are present (this alone does not prove the schema is installed) and `/api/records` rejects anonymous requests before connecting the UI.
-8. Only then wire the UI to authenticated database access and run a verified data migration from each legacy browser database.
+8. **In progress:** Wire authentication into the UI. Next, route record reads and writes through the authenticated API, then run a verified data migration only after reviewing backups and company/site mapping.
 
 ## Why the app has not switched yet
 
-Vercel currently reports no connected database integrations for this project. No Supabase project URL or public anon key is available to the app, and no legacy data can be safely migrated from remote browsers by the current deployment. The API scaffold is not yet wired into the frontend. The SQL is a schema draft, not a claim that storage or production authentication is working.
+The database schema, production connection settings, and first administrator profile are ready. The authentication UI is on a pull request. The API scaffold is not wired into the record screens, and no legacy data has been migrated. Server/API persistence and company/site scoping must be completed before records are copied.
 
 ## Migration requirements
 
