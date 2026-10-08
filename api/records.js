@@ -5,6 +5,9 @@ const ALLOWED_STORES = new Set([
   'findings', 'attachments', 'formRecords'
 ]);
 const MAX_RECORD_BYTES = 512 * 1024;
+const DEFAULT_PAGE_SIZE = 100;
+const MAX_PAGE_SIZE = 200;
+const MAX_PAGE_OFFSET = 1000000;
 
 function json(res, status, body) {
   res.setHeader('Cache-Control', 'no-store');
@@ -58,16 +61,30 @@ module.exports = async function handler(req, res) {
     if (req.method === 'GET') {
       const store = String(req.query?.store || '');
       if (!ALLOWED_STORES.has(store)) return json(res, 400, { error: 'invalid_store' });
+      const limitValue = req.query?.limit === undefined ? DEFAULT_PAGE_SIZE : Number(req.query.limit);
+      const offsetValue = req.query?.offset === undefined ? 0 : Number(req.query.offset);
+      if (!Number.isInteger(limitValue) || limitValue < 1 || limitValue > MAX_PAGE_SIZE ||
+          !Number.isInteger(offsetValue) || offsetValue < 0 || offsetValue > MAX_PAGE_OFFSET) {
+        return json(res, 400, { error: 'invalid_pagination' });
+      }
       const query = new URL(`${cfg.url}/rest/v1/system_records`);
       query.search = new URLSearchParams({
         select: 'store_name,record_id,data,version,company_id,site_id,created_by,updated_by,created_at,updated_at,deleted_at',
         store_name: `eq.${store}`,
-        order: 'updated_at.asc'
+        order: 'updated_at.asc,record_id.asc',
+        limit: String(limitValue + 1),
+        offset: String(offsetValue)
       }).toString();
       const response = await fetch(query, { headers: { ...authHeaders, Accept: 'application/json' } });
       const payload = await response.json().catch(() => null);
       if (!response.ok) return json(res, response.status, { error: 'record_read_failed' });
-      return json(res, 200, { records: payload || [] });
+      const rows = Array.isArray(payload) ? payload : [];
+      const hasMore = rows.length > limitValue;
+      return json(res, 200, {
+        records: hasMore ? rows.slice(0, limitValue) : rows,
+        page: { limit: limitValue, offset: offsetValue, hasMore,
+          nextOffset: hasMore ? offsetValue + limitValue : null }
+      });
     }
 
     const body = safeBody(req);
