@@ -1,6 +1,6 @@
-# HSE Work Permit and Safety Forms Workspace (local prototype)
+# HSE Work Permit and Safety Forms Workspace
 
-Open through a static web server from the project root (IndexedDB requires a browser origin). Start at `index.html`. Open **Reference Forms** to create one of the 12 templates transcribed from the photographs. Navigation and page shells share the UI, translation dictionary, database, theme, role checks, and change trail.
+The currently deployed application is still a browser-local prototype. Open through a static web server from the project root (IndexedDB requires a browser origin) and start at `index.html`. Open **Reference Forms** to create one of the 12 templates transcribed from the photographs.
 
 ## Source material and data integrity
 
@@ -16,7 +16,11 @@ The supplied folder contained 14 JPEG scans of work permit, isolation, and safet
 - Arabic/English navigation and primary field labels, RTL/LTR, light/dark themes and responsive layouts.
 - Local CRUD for primary records, JSON backup/restore and change history.
 
-## Important deployment boundary
+## Deployment and migration boundary
 
-This is an offline browser prototype, not production authentication or a secure enterprise authorization boundary. User role selection is local to the browser session; client-side checks can be bypassed by a technically capable user. Use a trusted backend, authenticated identities, server-side authorization, encrypted backups, and formal validation before operational deployment. Backups include structured records and the form archive, but not binary attachment contents. No audit form appears in the supplied images; the separate audit page is not derived from those photographs.
+This application does not yet have shared server storage or real authentication. User role selection is local to the browser session; client-side checks can be bypassed by a technically capable user. Do not use it as the authoritative production permit system until the backend, authenticated identities, server-side authorization, backup/restore, and safety validation are complete.
+
+The first shared-storage schema is drafted in `database/migrations/001_initial_schema.sql` for Supabase Postgres and Auth. It has **not** been applied because this Vercel project has no database connection. See `IMPROVEMENT_ROADMAP.md` for the ordered 100-item execution tracker and the current blocker. Provision and connect the database before switching the application away from IndexedDB. Preserve/export each browser's records and reconcile them before migration; do not assume Vercel deployment contains local browser data.
+
+Backups currently include structured records and form archive metadata, but not binary attachment contents. No audit form appears in the supplied images; the separate audit page is not derived from those photographs.
 
