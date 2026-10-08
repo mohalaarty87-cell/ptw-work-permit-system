@@ -14,7 +14,7 @@ This is the execution ledger for the user's 100 ordered improvements. Items rema
 - [ ] 6. Attribute every change to a verified user identity.
 - [ ] 7. Use a relational database for linked operational records.
 - [ ] 8. Isolate data between customer organizations where applicable.
-- [ ] 9. Migrate existing browser records without losing data. **Safety groundwork completed early:** local backup v3 includes attachment contents, a SHA-256 integrity digest, and conflict-safe merge; device-to-server migration remains pending.
+- [ ] 9. Migrate existing browser records without losing data. **Safety groundwork is implemented but not yet runtime-verified:** local backup v3 includes attachment contents, a SHA-256 integrity digest, and conflict-safe merge; device-to-server migration remains pending.
 - [ ] 10. Support safe offline work and conflict-aware synchronization.
 
 ## Phase 2 — Permit lifecycle
