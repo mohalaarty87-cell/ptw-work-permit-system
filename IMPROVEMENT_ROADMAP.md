@@ -2,13 +2,13 @@
 
 This is the execution ledger for the user's 100 ordered improvements. Items remain in this order. Mark an item complete only after implementation and verification; do not treat a proposal or scaffold as done.
 
-**Progress: 0/100 complete. Items 1–2 have implementation groundwork; end-to-end verification is blocked until the database is provisioned and connected.**
+**Progress: 0/100 complete. Supabase schema and production environment configuration are in place, and the first verified account has an Administrator profile. The browser app is still using local IndexedDB and is not yet connected to Supabase, so the first two items remain in progress.**
 
 ## Phase 1 — Shared architecture and data
 
-- [ ] 1. Move records from browser IndexedDB to a central server database. **Status: in progress; schema draft prepared, but production migration is blocked on provisioning a database project/connection.** See `database/SETUP.md`.
-- [ ] 2. Add a server API that validates and persists changes. **Status: API scaffold added; it is not connected to the browser or live database yet.**
-- [ ] 3. Replace local role selection with authenticated employee accounts.
+- [ ] 1. Move records from browser IndexedDB to a central server database. **Status: in progress; the Supabase schema is applied and Vercel has the public connection settings, but no browser data has been migrated and the app still reads local IndexedDB.** See `database/SETUP.md`.
+- [ ] 2. Add a server API that validates and persists changes. **Status: API scaffold and production environment settings exist; runtime integration and authenticated end-to-end verification remain pending.**
+- [ ] 3. Replace local role selection with authenticated employee accounts. **Status: implementation prepared on `codex/supabase-auth-entry`; awaiting deployment and sign-in verification.**
 - [ ] 4. Enforce authorization at the server/data boundary.
 - [ ] 5. Scope users to approved companies, sites, and departments.
 - [ ] 6. Attribute every change to a verified user identity.
@@ -136,7 +136,7 @@ This is the execution ledger for the user's 100 ordered improvements. Items rema
 
 ## Execution notes
 
-- The current application is a browser-local prototype. A Vercel project is connected to GitHub, but the project has no database connector attached.
+- Supabase schema and Production connection settings are in place, and the first Auth account has an active Administrator profile. The browser UI is being changed to use Supabase Auth; its operational records remain in IndexedDB until a reviewed migration is approved.
 - Do not mark database migration, authentication, or operational readiness complete until infrastructure is provisioned, data is migrated, access controls are enforced, and the end-to-end flow is verified.
 - No user records or sample operational permits should be fabricated.
 - Backup/migration safety work was advanced early because it protects the data needed by item 1; it does not count as a completed central migration.
