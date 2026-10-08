@@ -2,12 +2,12 @@
 
 This is the execution ledger for the user's 100 ordered improvements. Items remain in this order. Mark an item complete only after implementation and verification; do not treat a proposal or scaffold as done.
 
-**Progress: 0/100 complete. Item 1 groundwork is drafted; production migration is blocked until the database is provisioned and connected.**
+**Progress: 0/100 complete. Items 1–2 have implementation groundwork; end-to-end verification is blocked until the database is provisioned and connected.**
 
 ## Phase 1 — Shared architecture and data
 
 - [ ] 1. Move records from browser IndexedDB to a central server database. **Status: in progress; schema draft prepared, but production migration is blocked on provisioning a database project/connection.** See `database/SETUP.md`.
-- [ ] 2. Add a server API that validates and persists changes.
+- [ ] 2. Add a server API that validates and persists changes. **Status: API scaffold added; it is not connected to the browser or live database yet.**
 - [ ] 3. Replace local role selection with authenticated employee accounts.
 - [ ] 4. Enforce authorization at the server/data boundary.
 - [ ] 5. Scope users to approved companies, sites, and departments.

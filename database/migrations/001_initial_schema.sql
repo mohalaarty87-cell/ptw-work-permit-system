@@ -153,6 +153,46 @@ as $$
   end
 $$;
 
+-- Persist the audit event in the same transaction as each accepted record write.
+create or replace function public.audit_system_record_mutation()
+returns trigger
+language plpgsql security definer
+set search_path = ''
+as $$
+begin
+  if tg_op = 'INSERT' then
+    insert into public.audit_events (
+      actor_id, company_id, site_id, action, store_name, record_id, after_data
+    ) values (
+      (select auth.uid()), new.company_id, new.site_id, 'created',
+      new.store_name, new.record_id, new.data
+    );
+    return new;
+  end if;
+
+  if tg_op = 'UPDATE' then
+    insert into public.audit_events (
+      actor_id, company_id, site_id, action, store_name, record_id,
+      reason, before_data, after_data
+    ) values (
+      (select auth.uid()), new.company_id, new.site_id,
+      case when new.deleted_at is not null and old.deleted_at is null then 'archived' else 'updated' end,
+      new.store_name, new.record_id,
+      coalesce(nullif(new.data ->> 'deletedReason', ''), nullif(new.data ->> 'changeReason', '')),
+      old.data, new.data
+    );
+    return new;
+  end if;
+
+  return old;
+end;
+$$;
+
+drop trigger if exists system_records_audit_mutation on public.system_records;
+create trigger system_records_audit_mutation
+  after insert or update on public.system_records
+  for each row execute function public.audit_system_record_mutation();
+
 alter table public.companies enable row level security;
 alter table public.sites enable row level security;
 alter table public.profiles enable row level security;
@@ -223,6 +263,15 @@ grant select on public.audit_events to authenticated;
 grant select, insert, update on public.system_records to authenticated;
 grant select on public.profiles, public.companies, public.sites to authenticated;
 grant select, insert on public.attachments to authenticated;
+revoke all on function public.current_profile() from public, anon;
+revoke all on function public.current_role() from public, anon;
+revoke all on function public.can_read_store(text) from public, anon;
+revoke all on function public.can_write_store(text) from public, anon;
+grant execute on function public.current_profile() to authenticated;
+grant execute on function public.current_role() to authenticated;
+grant execute on function public.can_read_store(text) to authenticated;
+grant execute on function public.can_write_store(text) to authenticated;
+revoke all on function public.audit_system_record_mutation() from public, anon, authenticated;
 
 comment on table public.system_records is 'Data migrated from existing IndexedDB stores; clients retain their record IDs.';
 comment on table public.audit_events is 'Append-only audit events written by trusted server-side operations.';
