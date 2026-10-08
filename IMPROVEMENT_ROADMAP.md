@@ -2,13 +2,13 @@
 
 This is the execution ledger for the user's 100 ordered improvements. Items remain in this order. Mark an item complete only after implementation and verification; do not treat a proposal or scaffold as done.
 
-**Progress: 0/100 complete. Supabase schema and production environment configuration are in place, and the first verified account has an Administrator profile. The browser app is still using local IndexedDB and is not yet connected to Supabase, so the first two items remain in progress.**
+**Progress: 0/100 complete. Supabase schema, production environment, administrator profile, production sign-in UI, and production redirect settings are in place. Operational screens still use local IndexedDB; the record API and data flow remain unverified end to end.**
 
 ## Phase 1 — Shared architecture and data
 
 - [ ] 1. Move records from browser IndexedDB to a central server database. **Status: in progress; the Supabase schema is applied and Vercel has the public connection settings, but no browser data has been migrated and the app still reads local IndexedDB.** See `database/SETUP.md`.
-- [ ] 2. Add a server API that validates and persists changes. **Status: API scaffold and production environment settings exist; runtime integration and authenticated end-to-end verification remain pending.**
-- [ ] 3. Replace local role selection with authenticated employee accounts. **Status: implementation prepared on `codex/supabase-auth-entry`; awaiting deployment and sign-in verification.**
+- [ ] 2. Add a server API that validates and persists changes. **Status: authenticated API scaffold exists and record reads are paginated; screens are not wired to it and authenticated persistence remains unverified.**
+- [ ] 3. Replace local role selection with authenticated employee accounts. **Status: Supabase sign-in is deployed and the production redirect allowlist is configured; account-owner sign-in/profile flow still needs runtime confirmation.**
 - [ ] 4. Enforce authorization at the server/data boundary.
 - [ ] 5. Scope users to approved companies, sites, and departments.
 - [ ] 6. Attribute every change to a verified user identity.
@@ -136,7 +136,7 @@ This is the execution ledger for the user's 100 ordered improvements. Items rema
 
 ## Execution notes
 
-- Supabase schema and Production connection settings are in place, and the first Auth account has an active Administrator profile. The browser UI is being changed to use Supabase Auth; its operational records remain in IndexedDB until a reviewed migration is approved.
+- Supabase schema and Production connection settings are in place, and the first Auth account has an active Administrator profile. The production browser UI uses Supabase Auth; operational records remain in IndexedDB until a reviewed migration is approved.
 - Do not mark database migration, authentication, or operational readiness complete until infrastructure is provisioned, data is migrated, access controls are enforced, and the end-to-end flow is verified.
 - No user records or sample operational permits should be fabricated.
 - Backup/migration safety work was advanced early because it protects the data needed by item 1; it does not count as a completed central migration.
